@@ -7,7 +7,7 @@ Enable a FHS environment with preconfigured settings and packages, reproducible 
 > Note: Require `nix flake` experimental feature to be [enabled](https://nixos.wiki/wiki/Flakes).
 
 ```sh
-nix shell github:cloudyluna/flake-fhs
+nix develop --refresh github:cloudyluna/flake-fhs
 ```
 
 to exit out of the FHS environment, type `exit` in the terminal.

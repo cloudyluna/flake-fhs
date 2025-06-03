@@ -7,12 +7,17 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # We use this git rev (24.04 is because ncurses is not yet in the cache.nixos.org
+    # So we use this old package set to prevent user from building anything manually,
+    # if possible.
+    nixpkgs-2404.url = "github:NixOS/nixpkgs/78d9f40fd6941a1543ffc3ed358e19c69961d3c1";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
     {
       nixpkgs,
+      nixpkgs-2404,
       flake-utils,
       ...
     }:
@@ -20,6 +25,7 @@
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        nixpkgs2404 = nixpkgs-2404.legacyPackages.${system};
         fhs = pkgs.buildFHSEnv {
           name = "flake-fhs";
           targetPkgs = (
@@ -47,6 +53,8 @@
                 pkg-config
                 wayland
                 openssl
+                nixpkgs2404.libtinfo
+                nixpkgs2404.ncurses
                 clang
                 lldb
                 valgrind
