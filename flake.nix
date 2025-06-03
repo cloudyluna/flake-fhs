@@ -51,18 +51,10 @@
                 lldb
                 valgrind
                 libxkbcommon
-                gdk-pixbuf
-                cairo
-                pango
                 libdrm
                 dbus
-                gtk4
-                atk
-                gtk3
-                ncurses
                 gmp
                 nss
-                libtinfo
                 libpng
                 zlib
                 SDL
