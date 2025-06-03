@@ -1,8 +1,8 @@
 {
   description = ''
     A nix flake for setting up Linux's File Hierarchy System (FHS) environment.
-    This enables user to download a pre-compiled executables, compiled from another
-    Linux systems and run them as if they were natively produced on another NixOS system.
+    This enables user to download a pre-compiled executables, compiled from other
+    Linux systems and run them as if they were natively produced on here.
   '';
 
   inputs = {
@@ -19,9 +19,7 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs {
-          inherit system;
-        };
+        pkgs = nixpkgs.legacyPackages.${system};
         fhs = pkgs.buildFHSEnv {
           name = "flake-fhs";
           targetPkgs = (
@@ -29,10 +27,17 @@
               XPackages = with pkgs.xorg; [
                 libX11
                 libXcursor
+                libXcomposite
+                libXdamage
+                libXScrnSaver
+                libXxf86vm
                 libXext
-                libXi
-                libXinerama
+                libXfixes
                 libXrandr
+                libXrender
+                libxcb
+                libXinerama
+                libXi
               ];
               commonPackages = with pkgs; [
                 cmake
@@ -45,19 +50,51 @@
                 clang
                 lldb
                 valgrind
+                libxkbcommon
+                gdk-pixbuf
+                cairo
+                pango
+                libdrm
+                dbus
+                gtk4
+                atk
+                gtk3
+                ncurses
+                gmp
+                nss
+                libtinfo
+                libpng
+                zlib
+                SDL
+                SDL_gfx
+                SDL_image
+                SDL_mixer
+                SDL_ttf
+                SDL2
+                SDL2_image
+                SDL2_mixer
+                SDL2_ttf
+                libGL
+                libGLU
               ];
             in
-            pkgs:
-            [
-            ]
-            ++ XPackages
-            ++ commonPackages
+            pkgs': XPackages ++ commonPackages
           );
+
+          multiPkgs =
+            pkgs':
+            (with pkgs; [
+              udev
+              alsa-lib
+            ]);
+
+          runScript = "bash";
         };
 
       in
       {
         devShells.default = fhs.env;
+        packages.default = fhs;
       }
     );
 }
