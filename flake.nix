@@ -30,7 +30,7 @@
           name = "flake-fhs";
           targetPkgs = (
             let
-              XPackages = with pkgs.xorg; [
+              xPackages = with pkgs.xorg; [
                 libX11
                 libXcursor
                 libXcomposite
@@ -45,6 +45,18 @@
                 libXinerama
                 libXi
               ];
+              
+              sdlPackages = with pkgs; [
+                SDL
+                SDL_gfx
+                SDL_image
+                SDL_mixer
+                SDL_ttf
+                SDL2
+                SDL2_image
+                SDL2_mixer
+              ];
+              
               commonPackages = with pkgs; [
                 cmake
                 automake
@@ -65,20 +77,11 @@
                 nss
                 libpng
                 zlib
-                SDL
-                SDL_gfx
-                SDL_image
-                SDL_mixer
-                SDL_ttf
-                SDL2
-                SDL2_image
-                SDL2_mixer
-                SDL2_ttf
                 libGL
                 libGLU
               ];
             in
-            pkgs': XPackages ++ commonPackages
+            pkgs': xPackages ++ commonPackages ++ sdlPackages
           );
 
           multiPkgs =
