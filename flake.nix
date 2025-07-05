@@ -45,7 +45,7 @@
                 libXinerama
                 libXi
               ];
-              
+
               sdlPackages = with pkgs; [
                 SDL
                 SDL_gfx
@@ -56,7 +56,7 @@
                 SDL2_image
                 SDL2_mixer
               ];
-              
+
               commonPackages = with pkgs; [
                 cmake
                 automake
