@@ -53,8 +53,10 @@
                 SDL_mixer
                 SDL_ttf
                 SDL2
+                SDL2_gfx
                 SDL2_image
                 SDL2_mixer
+                SDL2_ttf
               ];
 
               commonPackages = with pkgs; [
