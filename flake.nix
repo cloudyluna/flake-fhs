@@ -7,17 +7,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # We use this git rev (24.04 is because ncurses is not yet in the cache.nixos.org
-    # So we use this old package set to prevent user from building anything manually,
-    # if possible.
-    nixpkgs-2404.url = "github:NixOS/nixpkgs/78d9f40fd6941a1543ffc3ed358e19c69961d3c1";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
     {
       nixpkgs,
-      nixpkgs-2404,
       flake-utils,
       ...
     }:
@@ -25,25 +20,23 @@
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        nixpkgs2404 = nixpkgs-2404.legacyPackages.${system};
         fhs = pkgs.buildFHSEnv {
           name = "flake-fhs";
           targetPkgs = (
             let
-              xPackages = with pkgs.xorg; [
-                libX11
-                libXcursor
-                libXcomposite
-                libXdamage
-                libXScrnSaver
-                libXxf86vm
-                libXext
-                libXfixes
-                libXrandr
-                libXrender
+              xPackages = with pkgs; [
+                libx11
+                libxcursor
+                libxcomposite
+                libxdamage
+                libxxf86vm
+                libxext
+                libxfixes
+                libxrandr
+                libxrender
                 libxcb
-                libXinerama
-                libXi
+                libxinerama
+                libxi
               ];
 
               sdlPackages = with pkgs; [
@@ -65,10 +58,11 @@
                 autoconf
                 gnumake
                 pkg-config
+                vulkan-loader
                 wayland
                 openssl
-                nixpkgs2404.libtinfo
-                nixpkgs2404.ncurses
+                libtinfo
+                ncurses
                 clang
                 lldb
                 valgrind
@@ -81,6 +75,15 @@
                 zlib
                 libGL
                 libGLU
+
+                gst_all_1.gstreamer
+                gst_all_1.gst-plugins-base
+                gst_all_1.gst-plugins-good
+                gst_all_1.gst-plugins-bad
+                gst_all_1.gst-plugins-ugly
+                fontconfig
+                glib
+                gobject-introspection
               ];
             in
             pkgs': xPackages ++ commonPackages ++ sdlPackages
